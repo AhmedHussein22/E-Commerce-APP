@@ -204,6 +204,7 @@ class _ProInDetalisState extends State<ProInDetalis> {
                               widget.product.urlimg,
                                widget.product.discount,
                             );
+                            showToast(context, "Added Successfully");
                         })
                   ],
                 ),

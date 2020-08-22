@@ -39,6 +39,8 @@ class Services {
       "company",
       "01x xxxx xxxx",
       "address",
+     user.uid,
+
       );
       return _userFromFirebase(user);
     } catch (e) {

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce/models/user_info.dart';
-import 'package:e_commerce/models/user_stream.dart';
 
 class DataBaseServices{
   final uid ;
@@ -9,10 +8,10 @@ class DataBaseServices{
   //collection reference
   final CollectionReference usercollection =Firestore.instance.collection("UserProfile");
 
-  Future updateUserData (String name  , String age, String company, String phone, String address)async{
+  Future updateUserData (String name  , String age, String company, String phone, String address ,String uid)async{
 
     return await usercollection.document(uid).setData({
-       
+       "uid": uid,
        "name": name,
        "age": age,
        "company": company,
@@ -23,16 +22,16 @@ class DataBaseServices{
   }
 
   //user list from snapshot
-   UserStream _userfeomsnapshot (DocumentSnapshot snapshot)
-  {
-    return UserStream(
-        address: snapshot.data["address"]??"",
-        name: snapshot.data["name"]??"",
-        age: snapshot.data["age"]??"",
-        company: snapshot.data["company"]??"",
-        phone: snapshot.data["phone"]??"",
-        );
-    }
+  //  UserStream _userfeomsnapshot (DocumentSnapshot snapshot)
+  // {
+  //   return UserStream(
+  //       address: snapshot.data["address"]??"",
+  //       name: snapshot.data["name"]??"",
+  //       age: snapshot.data["age"]??"",
+  //       company: snapshot.data["company"]??"",
+  //       phone: snapshot.data["phone"]??"",
+  //       );
+  //   }
     
   // user data from snapshot
   UserInfo _userDatafromsnapshot (DocumentSnapshot snapshot)
@@ -48,13 +47,11 @@ class DataBaseServices{
     );
   }
 
-  Stream<UserStream> get user{
-    return usercollection.document(uid).snapshots().map(_userfeomsnapshot);
-
-  }
+  // Stream<UserStream> get user{
+  //   return usercollection.document(uid).snapshots().map(_userfeomsnapshot);
+ // }
   //get user doc stream
   Stream<UserInfo>get userInfo{
-    return usercollection.document(uid).snapshots().map(_userDatafromsnapshot);
+    return usercollection.document().snapshots().map(_userDatafromsnapshot);
   }
-
 }

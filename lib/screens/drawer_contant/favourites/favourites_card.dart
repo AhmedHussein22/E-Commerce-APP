@@ -24,40 +24,15 @@ class _FavouritesCardState extends State<FavouritesCard> {
       child: Hero(
         tag: widget.productDetails.id,
         child: GridTile(
-            header: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                (widget.productDetails.discount) != 0.0
-                    ? Container(
-                        child: Text(
-                          "${widget.productDetails.discount} % free",
-                          style: theme.textTheme.headline1
-                              .copyWith(backgroundColor: Colors.red),
-                        ),
-                      )
-                    : null,
-                SizedBox(
-                  height: 0.0,
-                  width: (MediaQuery.of(context).size.width / 7.5),
-                ),
-               Builder(
-                           builder: (context) => IconButton(
-                      alignment: Alignment.topRight,
-                      icon: Icon(
-                        Icons.delete_forever,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        showToast(context,"Deleted Successfully");
-                         await Firestore.instance
-                            .collection("Favourites")
-                            .document(widget.productDetails.id)
-                            .delete();
-                           
-                      }),
-                )
-              ],
-            ),
+            header: (widget.productDetails.discount) != 0.0
+                      ? Container(
+                          child: Text(
+                            "${widget.productDetails.discount} % free",
+                            style: theme.textTheme.headline1
+                                .copyWith(backgroundColor: Colors.red),
+                          ),
+                        )
+                      : null,
             footer: Container(
                 color: Color(0x5500beff),
                 child: Column(
@@ -80,12 +55,28 @@ class _FavouritesCardState extends State<FavouritesCard> {
                                 decoration: TextDecoration.lineThrough,
                                 decorationColor: Colors.red,
                                 decorationThickness: 2),
-                          )
+                          ),
                         ],
                       ),
                     ),
+                    Builder(
+                           builder: (context) => IconButton(
+                      alignment: Alignment.topRight,
+                      icon: Icon(
+                        Icons.delete_forever,
+                        color: Colors.white,
+                      ),
+                      onPressed: () async {
+                        showToast(context,"Deleted Successfully");
+                         await Firestore.instance
+                            .collection("Favourites")
+                            .document(widget.productDetails.id)
+                            .delete();
+                      }),
+                )
                   ],
-                )),
+                ),
+                ),
             child: CachedNetworkImage(
               imageUrl: widget.productDetails.urlimg,
               errorWidget: (context, url, error) => Icon(Icons.error_outline),

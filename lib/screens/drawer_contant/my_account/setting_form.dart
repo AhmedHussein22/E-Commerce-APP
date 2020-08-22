@@ -1,11 +1,13 @@
 import 'package:e_commerce/models/user.dart';
 import 'package:e_commerce/models/user_info.dart';
 import 'package:e_commerce/services/user_db.dart';
-import 'package:e_commerce/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SettingForm extends StatefulWidget {
+    final List <UserInfo>userData;
+    SettingForm({this.userData});
+
   @override
   _SettingFormState createState() => _SettingFormState();
 }
@@ -24,13 +26,10 @@ class _SettingFormState extends State<SettingForm> {
     final user = Provider.of<User>(context);
     double height = MediaQuery.of(context).size.height;
 
-    return SingleChildScrollView(
-          child: StreamBuilder<UserInfo>(
-          stream: DataBaseServices(uid: user.uid).userInfo,
-          builder: (context, snapshot) {
-      UserInfo userData = snapshot.data;
-      if (snapshot.hasData) {
-        return Form(
+    return ListView.builder(
+      itemCount: 1,
+       itemBuilder: (buildContext, index) {
+          return Form(
           key: _key,
           child: Column(
             children: [
@@ -44,7 +43,7 @@ class _SettingFormState extends State<SettingForm> {
 
               //*******************UPdate name***********//
               TextFormField(
-                initialValue: userData.name,
+                initialValue:widget.userData[index].name ,
                 decoration: InputDecoration(
                     icon: Icon(
                       Icons.person_pin,
@@ -63,7 +62,7 @@ class _SettingFormState extends State<SettingForm> {
 
               //*******************UPdate Address***********//
               TextFormField(
-                initialValue: userData.address,
+                initialValue: widget.userData[index].address,
                 decoration: InputDecoration(
                     icon: Icon(
                       Icons.person_pin_circle,
@@ -81,7 +80,7 @@ class _SettingFormState extends State<SettingForm> {
               ),
               //*******************UPdate Phone***********//
               TextFormField(
-                initialValue: userData.phone,
+                initialValue: widget.userData[index].phone,
                 decoration: InputDecoration(
                     icon: Icon(
                       Icons.phone,
@@ -99,7 +98,7 @@ class _SettingFormState extends State<SettingForm> {
               ),
               //*******************UPdate company***********//
               TextFormField(
-                initialValue: userData.company,
+                initialValue: widget.userData[index].company,
                 decoration: InputDecoration(
                     icon: Icon(
                       Icons.location_city,
@@ -117,7 +116,7 @@ class _SettingFormState extends State<SettingForm> {
                 height: height * 0.01,
               ),
               TextFormField(
-                initialValue: userData.age,
+                initialValue: widget.userData[index].age,
                 decoration: InputDecoration(
                     icon: Icon(
                       Icons.assignment,
@@ -142,11 +141,13 @@ class _SettingFormState extends State<SettingForm> {
                   onPressed: () async {
                     if (_key.currentState.validate()) {
                       await DataBaseServices(uid: user.uid).updateUserData(
-                          crruntName ?? userData.name,
-                          crruntAge ?? userData.age,
-                          crruntCompany ?? userData.company,
-                          crruntPhone ?? userData.phone,
-                          crruntAddress ?? userData.address);
+                          crruntName ?? widget.userData[index].name,
+                          crruntAge ?? widget.userData[index].age,
+                          crruntCompany ?? widget.userData[index].company,
+                          crruntPhone ?? widget.userData[index].phone,
+                          crruntAddress ?? widget.userData[index].address,
+                          user.uid,
+                          );
                       Navigator.pop(context);
                     }
                   },
@@ -163,12 +164,8 @@ class _SettingFormState extends State<SettingForm> {
               )
             ],
           ),
-        );
-      } else {
-        return Loading();
-      }
-          },
-        ),
     );
+      },
+        );
   }
 }

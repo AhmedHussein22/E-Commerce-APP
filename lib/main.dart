@@ -1,7 +1,5 @@
 import 'package:e_commerce/models/crud_model.dart';
 import 'package:e_commerce/models/user.dart';
-import 'package:e_commerce/models/user_stream.dart';
-import 'package:e_commerce/provider/cart_items.dart';
 import 'package:e_commerce/screens/cart/car_order.dart';
 import 'package:e_commerce/screens/home/homepage.dart';
 import 'package:e_commerce/screens/login/login_screen.dart';
@@ -9,12 +7,10 @@ import 'package:e_commerce/screens/payment/buy_now.dart';
 import 'package:e_commerce/screens/payment/existing_cards.dart';
 import 'package:e_commerce/screens/singup/singup.dart';
 import 'package:e_commerce/services/locator.dart';
-import 'package:e_commerce/services/user_db.dart';
 import 'package:e_commerce/shared/chech_first_time.dart';
 import 'package:e_commerce/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:provider/provider.dart';
 import 'screens/admin_side/add_new_product.dart';
 import 'screens/all_categoris/accesories.dart';
@@ -54,15 +50,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider( 
           create: (context) => locator<CRUDModel>()
           ),
-           ChangeNotifierProvider<CartItem>( 
-          create: (context) => CartItem()
-          ),
        StreamProvider<User>.value(
          value: Services().user,
-        ),
-        StreamProvider<UserStream>.value(
-        catchError: (_, __) => null,
-         value: DataBaseServices().user,
         ),
       ],
           child: MaterialApp(
